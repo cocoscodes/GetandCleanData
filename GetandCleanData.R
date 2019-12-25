@@ -17,15 +17,23 @@ setwd("./Getting_and_Cleaning_Data")
 # absolute path
 setwd("/Users/alejandrosolis/Desktop/Data_Sc/R/Getting_and_Cleaning_Data")
 
+# checking for and creating directories
+file.exists()
+dir.create()
 
+if(!file.exists("GetandCleanData")){ # check and create
+  dir.create("GetandCleanData")
+}
 
+# getting data forom the internet
+download.file()
 
+fileUrl <- "http://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accessType=DOWNLOAD"
+download.file(fileUrl,destfile = "./GetandCleanData/cameras.csv", method = "curl")
+list.files("./GetandCleanData")
+DateDownloaded <- date()# datasets change so keep track on when you downloaded
 
-
-
-
-
-
-
+cameras <- read.csv(fileUrl) # getting an error which this fixes
+write.csv(cameras,"cameras.csv") # saves a dataframe to a csv file
 
 
