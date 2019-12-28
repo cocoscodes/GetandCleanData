@@ -4,7 +4,7 @@
 # 3.- code book - (metadata) describes each variable and value in the tidy data set
 # 4.- instruction list - steps mapping (how you got from A to B), add any other programming languages code also
 
-# Tidy data shouls have - one talbe per element, each variable in one column, 
+# Tidy data shouls have - one table per element, each variable in one column, 
 #each observation in one row, row 1 should have human readable names, 
 #foreign keys to loink tables, and one file per table
 
@@ -111,7 +111,7 @@ DF = data.frame(x=rnorm(9),y=rep(c("a","b","c"),3),z=rnorm(9))
 head(DF,3)  
 
 DT = data.table(x=rnorm(9),y=rep(c("a","b","c"),3),z=rnorm(9))  
-head(DT,3)  # ame result as above
+head(DT,3)  # same result as above
 
 tables() # see all data tables in memory
 DT[2,]
@@ -151,6 +151,27 @@ file <- tempfile()
 write.table(big_df,file=file,row.names = FALSE,col.names = TRUE,sep = "\t",quote = FALSE)  
 system.time(fread(file))  # faster method to read a file
 system.time(read.table(file,header = TRUE,sep = "\t")) # way slower elapsed time
+
+# Week 1 quiz ----
+fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv"
+download.file(fileUrl,destfile = "/Users/alejandrosolis/Desktop/Data_Sc/R/GetandCleanData/idahoSurvey.csv", method = "curl")
+idaho_survey <- read.csv("idahoSurvey.csv")
+head(idaho_survey,3)
+summary(idaho_survey$VAL>=24)
+
+dat <- read.table("getdata_data_DATA.gov_NGAP.xlsx")
+
+fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml"
+r = getURL(fileUrl)
+doc <- htmlTreeParse(r, useInternalNodes = TRUE)
+zipcode <- xpathSApply(doc,"//zipcode",xmlValue)
+summary(zipcode[zipcode=="21231"])
+
+fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv"
+download.file(fileUrl,destfile = "/Users/alejandrosolis/Desktop/Data_Sc/R/GetandCleanData/idahoSurvey.csv", method = "curl")
+DT <- fread("idahoSurvey.csv")
+system.time(DT[,mean(pwgtp15),by=SEX])
+
 
 
 
