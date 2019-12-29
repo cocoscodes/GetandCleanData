@@ -172,6 +172,35 @@ download.file(fileUrl,destfile = "/Users/alejandrosolis/Desktop/Data_Sc/R/Getand
 DT <- fread("idahoSurvey.csv")
 system.time(DT[,mean(pwgtp15),by=SEX])
 
+# Reading from MySQL ----
+install.packages("RMySQL")
+library(RMySQL)
+# connecting and listing databases
+ucscDb <- dbConnect(MySQL(),user="genome",
+                    host="genome-euro-mysql.soe.ucsc.edu") # connect to the database server
+result <- dbGetQuery(ucscDb,"show databases;"); dbDisconnect(ucscDb); # get a query, ALWAYS disconnect when finish the query
+result
+
+hg19 <- dbConnect(MySQL(),
+                  user="genome",db="hg19", # connect ot the specific DB
+                  host="genome-euro-mysql.soe.ucsc.edu")
+allTables <- dbListTables(hg19)
+length(allTables)
+allTables[1:5]
+dbListFields(hg19,"affyU133Plus2") # columns are just like fields
+dbGetQuery(hg19,"select count(*) from affyU133Plus2") # counted the rows
+affyData <- dbReadTable(hg19,"affyU133Plus2") # read from table
+head(affyData)
+
+query <- dbSendQuery(hg19,"select * from affyU133Plus2 where misMatches between 1 and 3")
+affyMis <- fetch(query); quantile(affyMis$misMatches)
+affyMisSmall <- fetch(query,n=10); dbClearResult(query); # fetching a subset of the table, and clear the query in the server
+dim(affyMisSmall)
+dbDisconnect(hg19) # ALWAYS close your connection after yo have extracted the data
+# NOTE, try ONLY to use the SELECT command on this packages, you could delete or modify some elses data
+
+
+
 
 
 
