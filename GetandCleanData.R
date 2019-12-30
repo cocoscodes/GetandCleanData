@@ -233,8 +233,59 @@ readA = h5read("example.h5","foo/A")
 readB = h5read("example.h5","foo/B")
 readdf = h5read("example.h5","df")
 readA
-# wirtting and reading chunks
+# writting and reading chunks
 h5write(c(12,13,14),"example.h5","foo/A",index=list(1:3,1)) # first three rows of the first column
 h5read("example.h5","foo/A")
+
+# Reading data from the web ----
+# getting data from webpages
+con = url("https://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en") # open a connection
+htmlCode = readLines(con) # read data from connection
+close(con) # close the connection
+htmlCode # code with no structure
+
+# NOTE parse it with XML one way to improve readability and data extraction
+url <- "https://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en"
+r <- getURL(url)
+html <- htmlTreeParse(r,useInternalNodes = TRUE)
+
+xpathSApply(html,"//title",xmlValue)
+xpathSApply(html,"//td[@id='col-citedby']",xmlValue)
+
+# GET from the httr package
+library(httr)
+html2 = GET(url)
+content2 = content(html2,as="text") # extracting content from html page
+parsedHTML = htmlParse(content2,asText = TRUE)
+
+xpathSApply(parsedHTML,"//title",xmlValue)
+
+# Accessing webpages with password
+pg1 = GET("http://httpbin.org/basic-auth/user/passwd")
+pg1 # you get status 401 cause it needs password to log in
+# authenticate yourself
+pg2 = GET("http://httpbin.org/basic-auth/user/passwd",
+          authenticate("user","passwd"))
+pg2 # status 200 we have gain access
+names(pg2)
+
+# using handles to authenticate over multiple websites
+google = handle("http://google.com") # this is the handle, when you authenticate the handle you can access the website cause the cookies will stay in the website
+pg1 = GET(handle = google,path="/")
+pg2 = GET(handle = google,path="search")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
