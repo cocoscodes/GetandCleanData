@@ -148,7 +148,8 @@ merge(DT1,DT2)
 
 big_df <- data.frame(x=rnorm(1E6),y=rnorm(1E6))  
 file <- tempfile()  
-write.table(big_df,file=file,row.names = FALSE,col.names = TRUE,sep = "\t",quote = FALSE)  
+write.table(big_df,file=file,row.names = FALSE,
+            col.names = TRUE,sep = "\t",quote = FALSE)  
 system.time(fread(file))  # faster method to read a file
 system.time(read.table(file,header = TRUE,sep = "\t")) # way slower elapsed time
 
@@ -193,17 +194,47 @@ affyData <- dbReadTable(hg19,"affyU133Plus2") # read from table
 head(affyData)
 
 query <- dbSendQuery(hg19,"select * from affyU133Plus2 where misMatches between 1 and 3")
-affyMis <- fetch(query); quantile(affyMis$misMatches)
+affyMis <- fetch(query); quantile(affyMis$misMatches) # using semicolon ; helps adding function to the data
 affyMisSmall <- fetch(query,n=10); dbClearResult(query); # fetching a subset of the table, and clear the query in the server
 dim(affyMisSmall)
 dbDisconnect(hg19) # ALWAYS close your connection after yo have extracted the data
 # NOTE, try ONLY to use the SELECT command on this packages, you could delete or modify some elses data
 
+# Reading HDF5 ----
+# heirarchical data format¡
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install()
+BiocManager::available()
+BiocManager::install("rhdf5")
+library(rhdf5)
 
-
-
-
-
-
+created = h5createFile("example.h5")
+created
+# create groups within the file
+created = h5createGroup("example.h5","foo")
+created = h5createGroup("example.h5","baa")
+created = h5createGroup("example.h5","foo/foobaa")
+h5ls("example.h5")
+# write to groups
+A = matrix(1:10,nr=5,nc=2)
+h5write(A, "example.h5","foo/A")
+B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+attr(B, "scale") <- "liter"
+h5write(B, "example.h5","foo/B")
+h5ls("example.h5")
+# write a data set
+df = data.frame(1L:5L,seq(0,1,length.out = 5),
+                c("ab","cde","fghi","a","s"),stringsAsFactors = FALSE)
+h5write(df,"example.h5","df")
+h5ls("example.h5")
+# Read data
+readA = h5read("example.h5","foo/A")
+readB = h5read("example.h5","foo/B")
+readdf = h5read("example.h5","df")
+readA
+# wirtting and reading chunks
+h5write(c(12,13,14),"example.h5","foo/A",index=list(1:3,1)) # first three rows of the first column
+h5read("example.h5","foo/A")
 
 
