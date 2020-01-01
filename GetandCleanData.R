@@ -274,18 +274,103 @@ google = handle("http://google.com") # this is the handle, when you authenticate
 pg1 = GET(handle = google,path="/")
 pg2 = GET(handle = google,path="search")
 
+# Read data from APIs ----
+# application programming interfaces
 
+# you will first need to create an application on each webpage in the developers interface
+library(httr)
 
+myapp = oauth_app("twitter",key = "your consumer key here", # authorization pathway
+                  secret = "your consumer secret here")
 
+sig = sign_oauth1.0(myapp,token = "your token here", # sign in
+                    token_secret = "your token secret here")
 
+homeTL = GET("https://api.twitter.com/1.1/statuses/home_timeline.json",sig) 
+# GET command and the URL that refers to the API, very specific URL, look into the documentation of the API to know the URL
+# ceonverting the json object
+json1 = content(homeTL)
+json2 = jsonlite::fromJSON(toJSON(json1)) # the :: activates a package jsonlite
+# taking the R object back to json
+json2[1.1:4]
 
+#httr allows GET, POST, PUT, and DELETE request if you are authorize
 
+# Reading from ohter sources ----
+# usuallythere is an R package for data search of everything
+# use the file, url, gzfile (zip files), and bzfile commands, ?connections
+# remember to close connections
+install.packages("foreign") # serves to interact with other types of programming lnaguages
+# others: PostgresSQL, RMongo, RODBC
+# reading images with jpeg, readbitmap, png, EBImage(bioconductor)
+# reading GIS data (geographic) rdgal, rgeos, raster
+# read music data with tuneR, and seewave
 
+# Week 2 quiz ----
+library(httr)
+install.packages("httpuv")
+library(httpuv)
 
+# 1. Find OAuth settings for github:
+#    http://developer.github.com/v3/oauth/
+oauth_endpoints("github")
 
+# 2. To make your own application, register at
+#    https://github.com/settings/developers. Use any URL for the homepage URL
+#    (http://github.com is fine) and  http://localhost:1410 as the callback url
+#
+#    Replace your key and secret below.
+myapp <- oauth_app("github",
+                   key = "b543748f2d7ae4e451a5",
+                   secret = "6761961e9d7de2626d415362ee0b5017e146f402"
+)
 
+# 3. Get OAuth credentials
+github_token <- oauth2.0_token(oauth_endpoints("github"), myapp) # to get credentials you need package httpuv
 
+# 4. Use API
+gtoken <- config(token = github_token)
+req <- GET("https://api.github.com/users/jtleek/repos", gtoken)
+stop_for_status(req)
+json1 = content(req)
+json2 = jsonlite::fromJSON(jsonlite::toJSON(json1))
+json2[json2$full_name == "jtleek/datasharing", "created_at"] 
 
+# OR:
+req <- with_config(gtoken, GET("https://api.github.com/users/jtleek/repos"))
+stop_for_status(req)
+content(req)
 
+# question 2
+install.packages("sqldf")
+library(sqldf)
+
+acs <- read.csv("getdata_data_ss06pid.csv",header = TRUE)
+
+result <- sqldf("select pwgtp1 from acs where AGEP < 50") # very important to detached RMySQL package to make it work
+head(result)
+
+# question 3
+unique(acs$AGEP)
+result1 <- sqldf("select distinct AGEP from acs")
+result1 == unique(acs$AGEP)
+
+# question 4
+con = url("http://biostat.jhsph.edu/~jleek/contact.html") # open a connection
+htmlCode = readLines(con) # read data from connection
+close(con) # close the connection
+htmlCode # code with no structure
+c(nchar(htmlCode[10]), nchar(htmlCode[20]), nchar(htmlCode[30]), nchar(htmlCode[100]))
+# obtain the result in 1 vector c()
+
+# question 5
+url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for"
+htmlCode <- readLines(url, n = 10)
+data <- read.fwf(url,c(1, 9, 5, 4, 1, 3, 5, 4, 1, 3, 5, 4, 1, 3, 5, 4, 1, 3),
+                 header = FALSE,
+                 skip = 4)# (Hint this is a fixed width file format)
+str(data)
+tail(data)
+sum(data[,8]) # the fourth column is actually the eight element of the fix width format
 
 
