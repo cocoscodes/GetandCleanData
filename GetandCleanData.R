@@ -374,4 +374,10 @@ str(data)
 tail(data)
 sum(data[,8]) # the fourth column is actually the eight element of the fix width format
 
+# Subsetting and sorting ----
+
+
+
+
+
 
