@@ -25,7 +25,7 @@ if(!file.exists("GetandCleanData")){ # check and create
   dir.create("GetandCleanData")
 }
 
-# getting data forom the internet
+# getting data from the internet
 download.file()
 
 fileUrl <- "http://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accessType=DOWNLOAD"
@@ -33,6 +33,7 @@ download.file(fileUrl,destfile = "/Users/alejandrosolis/Desktop/Data_Sc/R/Getand
 list.files("/Users/alejandrosolis/Desktop/Data_Sc/R/GetandCleanData")
 DateDownloaded <- date()# datasets change so keep track on when you downloaded
 
+# OR
 cameras <- read.csv(fileUrl) # getting an error which this fixes
 write.csv(cameras,"cameras.csv") # saves a dataframe to a csv file
 
@@ -201,7 +202,7 @@ dbDisconnect(hg19) # ALWAYS close your connection after yo have extracted the da
 # NOTE, try ONLY to use the SELECT command on this packages, you could delete or modify some elses data
 
 # Reading HDF5 ----
-# heirarchical data format¡
+# heirarchical data format
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 BiocManager::install()
@@ -288,7 +289,7 @@ sig = sign_oauth1.0(myapp,token = "your token here", # sign in
 
 homeTL = GET("https://api.twitter.com/1.1/statuses/home_timeline.json",sig) 
 # GET command and the URL that refers to the API, very specific URL, look into the documentation of the API to know the URL
-# ceonverting the json object
+# converting the json object
 json1 = content(homeTL)
 json2 = jsonlite::fromJSON(toJSON(json1)) # the :: activates a package jsonlite
 # taking the R object back to json
@@ -343,7 +344,7 @@ content(req)
 
 # question 2
 install.packages("sqldf")
-library(sqldf)
+library(sqldf) # this package will help simulate the dbSendQuery in RMySQL
 
 acs <- read.csv("getdata_data_ss06pid.csv",header = TRUE)
 
