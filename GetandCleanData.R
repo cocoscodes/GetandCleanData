@@ -375,6 +375,78 @@ tail(data)
 sum(data[,8]) # the fourth column is actually the eight element of the fix width format
 
 # Subsetting and sorting ----
+set.seed(13435)
+x <- data.frame("var1"=sample(1:5),"var2"=sample(6:10),"var3"=sample(11:15))
+x <- x[sample(1:5),]; x$var2[c(1,3)] = NA
+x
+x[,1]
+x[,"var1"]
+x[1:2,"var2"]
+x[x$var1<=3 & x$var3>11,]
+x[x$var1<=3 | x$var3>15,]
+x[which(x$var2>8),] # which command will eliminate the NA
+
+sort(x$var1)
+sort(x$var1,decreasing = TRUE) 
+sort(x$var2,na.last = TRUE)
+
+x[order(x$var1),] # order works in data frames not just columns
+x[order(x$var1,x$var3),]
+
+library(plyr)
+arrange(x,var1)
+arrange(x,desc(var1))
+
+# adding columns
+x$var4 <- rnorm(5)
+x
+
+y <- cbind(x,rnorm(5))
+y
+
+# Summarizing data ----
+getwd()
+if(!file.exists("./rest")){dir.create("./rest")}
+setwd("./rest")
+fileUrl <- "https://data.baltimorecity.gov/api/views/k5ry-ef3g/rows.csv?accessType=DOWNLOAD&bom=true&format=true&delimiter=%3B"
+download.file(fileUrl,destfile = "/Users/alejandrosolis/Desktop/Data_Sc/R/GetandCleanData/rest/Restaurants.csv", method = "curl")
+restData <- read.csv("Restaurants.csv", header = TRUE,sep = ";")
+
+head(restData)
+str(restData)
+summary(restData)
+quantile(restData$councilDistrict,na.rm = TRUE)
+quantile(restData$councilDistrict,probs = c(0.5,0.75,0.9))
+table(restData$zipCode,useNA = "ifany")# useNA to count the missing values
+table(restData$councilDistrict,restData$zipCode) # 2 dimensional tables
+sum(is.na(restData$councilDistrict)) # sum the NA
+any(is.na(restData$councilDistrict)) # is there any NA
+all(restData$zipCode>0) # does avery single value satisfy this condition
+colSums(is.na(restData)) # sum the NAs of every column
+any(colSums(is.na(restData))==0) # are there no missing values
+table(restData$zipCode %in% c("21212")) # search for specific values
+table(restData$zipCode %in% c("21212","21213"))
+restData[restData$zipCode %in% c("21212","21213"),] # subsetting a dataset with a variable
+
+data("UCBAdmissions")
+DF <- as.data.frame(UCBAdmissions)
+summary(DF)
+# Cross tabs
+xt <- xtabs(Freq ~ Gender + Admit, data = DF) # first variable is displayed, brokendown to gender and admitted
+xt
+# Flat tables
+warpbreaks$replicate <- rep(1:9,len=54)
+xt = xtabs(breaks ~.,data = warpbreaks) # breaks for all variables
+xt
+ftable(xt) # create the table
+# Size of data
+fakeData = rnorm(1e5)
+object.size(fakeData)
+print(object.size(fakeData),units = "Mb")
+
+
+
+
 
 
 
