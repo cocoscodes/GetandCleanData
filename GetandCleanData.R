@@ -493,24 +493,22 @@ log2(x)
 log10(x)
 exp(x)
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+# Reshaping data ----
+library(reshape2)
+head(mtcars)  
+# Melt data frames
+mtcars$carname <- rownames(mtcars)
+carMelt <- melt(mtcars,id=c("carname","gear","cyl"),measure.vars=c("mpg","hp"))  
+# melt will display the DF with the id columns and melt the others in one column
+head(carMelt,n=3)  
+tail(carMelt,n=3)
+# Casting data frames
+cylData <- dcast(carMelt,cyl~variable) # casting a summarized data set sum of variables
+cylData  
+cylData <- dcast(carMelt,cyl~variable,mean) # casting the mean of the variables
+cylData
 
-
-
-
-
-
+head(InsectSprays)
+tapply(InsectSprays$count,InsectSprays$spray,sum)
 
 
