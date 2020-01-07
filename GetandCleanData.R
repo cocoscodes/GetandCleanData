@@ -510,5 +510,79 @@ cylData
 
 head(InsectSprays)
 tapply(InsectSprays$count,InsectSprays$spray,sum)
+# another way to split and apply
+spIns <- split(InsectSprays$count,InsectSprays$spray)
+spIns
+sprCount <- lapply(spIns,sum)
+sprCount # we dont want lists so we turn into vector
+unlist(sprCount)
+sapply(spIns,sum)# remember that sapply always simplifies the data structure
+# another way
+library(plyr)
+ddply(InsectSprays,.(spray)# .() to avoid using ""
+      ,summarize,sum=sum(count))
+
+spraysums <- ddply(InsectSprays,.(spray),summarize,sum=ave(count,FUN = sum))
+dim(spraysums)
+head(spraysums)
+
+# another functions to be aware of
+acast() # multi-dimensional array
+arrange() # faster than order()
+mutate() # add new variables
+
+# Managing data frames with dplyr ----
+# NOTE: some function might be masked by other packages
+library(dplyr) # optimized and destilled version of plyr
+select() # returns a subset of the columns
+filter() # extracts a subset of the rows based on logical conditions
+arrange() # reorder rows of the DF
+rename() # rename varialbes
+mutate() # add or transform variables
+summarise() # generates a summary stastistics different variables 
+
+# Managin data with dplyr basic tools ----
+chicago <- readRDS("chicago")
+dim(chicago)
+names(chicago)
+
+head(select(chicago, city:dptp)) # view all columns from city to dptp
+head(select(chicago, -(city:dptp))) # view all columns except those mentioned
+
+chic.f <- filter(chicago,pm25tmean2 >30) # createsa subset
+head(chic.f,10)
+chic.f <- filter(chicago, pm25tmean2 > 30 & tmpd > 80)
+head(chic.f)
+
+chicago <- arrange(chicago,date) # arrange by date
+head(chicago)
+tail(chicago)
+chicago <- arrange(chicago,desc(date)) # descending
+head(chicago)
+
+chicago <- rename(chicago,pm25=pm25tmean2,dewpoint=dptp)
+head(chicago)
+
+chicago <- mutate(chicago, pm25detrend = pm25 - mean(pm25, na.rm = TRUE))
+head(select(chicago,pm25,pm25detrend))
+chicago <- mutate(chicago,tempcat=factor(1*(tmpd>80),labels = c("cold","hot")))
+tail(chicago)
+hotcold <- group_by(chicago,tempcat)
+hotcold
+summarise(hotcold,pm25=mean(pm25),o3=max(o3tmean2),no2=median(no2tmean2))
+summarise(hotcold,pm25=mean(pm25,na.rm = TRUE),o3=max(o3tmean2),
+          no2=median(no2tmean2))
+chicago <- mutate(chicago, year = as.POSIXlt(date)$year + 1900)
+years <- group_by(chicago,year)
+summarise(years,pm25=mean(pm25,na.rm = TRUE),o3=max(o3tmean2),
+          no2=median(no2tmean2))
+# pipeline operator %>% runs the data to a series of command to obtain a new dataset
+chicago %>% 
+  mutate(month = as.POSIXlt(date)$mon + 1) %>%
+  group_by(month) %>%
+  summarize(pm25 = mean(pm25, na.rm = TRUE),
+            o3 = max(o3tmean2, na.rm = TRUE),
+            no2 = median(no2tmean2, na.rm = TRUE))
+
 
 
