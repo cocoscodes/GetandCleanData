@@ -584,5 +584,36 @@ chicago %>%
             o3 = max(o3tmean2, na.rm = TRUE),
             no2 = median(no2tmean2, na.rm = TRUE))
 
+# Merging data ----
+
+if(!file.exists("./peer")){dir.create("./peer")}
+fileUrl1 <- "https://dl.dropboxusercontent.com/u/7710864/data/reviews-apr29.csv"
+fileUrl2 <- "https://dl.dropboxusercontent.com/u/7710864/data/solutions-apr29.csv"
+download.file(fileUrl1,destfile = "./peer/reviews.csv",method = "curl")
+download.file(fileUrl2,destfile = "./peer/solutions.csv",method = "curl")
+getwd()
+setwd("./peer")
+reviews = read.csv("reviews.csv")
+solutions = read.csv("solutions.csv")
+head(reviews,2)
+head(solutions,2)
+names(reviews)
+names(solutions)
+
+mergeData = merge(reviews,solutions,by.x = "solution_id",by.y = "id",all = TRUE)
+head(mergeData)
+
+intersect(names(solutions),names(reviews)) # merge all common column names
+mergeData2 = merge(reviews,solutions,all = TRUE)
+head(mergeData2)
+
+library(plyr) # using the join command
+df1 = data.frame(id=sample(1:10),x=rnorm(10))
+df2 = data.frame(id=sample(1:10),y=rnorm(10))
+arrange(join(df1,df2),id) # join by id
+
+df3 = data.frame(id=sample(1:10),z=rnorm(10))
+dfList = list(df1,df2,df3)
+join_all(dfList) # join_all to merge multiple datsets (more than 2)
 
 
