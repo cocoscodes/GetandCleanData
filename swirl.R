@@ -119,5 +119,57 @@ cran %>%
   arrange(desc(size_mb)) %>%
   print
 
+# Tidying Data with tidyr ----
+library(dplyr)
+library(readr)
+library(tidyr)
+students # data sets
+?gather # this function has been retired, please use pivot_longer()
+gather(students,sex,count,-grade) # all columns except grades, since grades is already a proper column
+
+res <- gather(students2,sex_class,count,-grade)
+res # need a second step to separate the sex_class
+separate(res,sex_class,into = c("sex","class"))
+
+# chain operation
+students2 %>%
+  gather(sex_class,count,-grade) %>%
+  separate(sex_class,into = c("sex","class")) %>%
+  print
+
+students3 %>%
+  gather(class, grade,class1:class5,na.rm = TRUE) %>% # after the value you can specify the column sequence class1:class5
+  spread(test, grade) %>% 
+  mutate(class = parse_number(class)) %>%
+  print
+
+student_info <- students4 %>%
+  select(id, name, sex) %>%
+  unique %>%
+  print
+
+gradebook <- students4 %>%
+  select(id,class,midterm,final) %>% # we kepp id on both df to preserve a primary key
+  print
+
+passed
+failed
+passed <- passed %>% mutate(status = "passed")
+failed <- failed %>% mutate(status = "failed")
+bind_rows(passed,failed)
+
+sat
+sat %>%
+  select(-contains("total")) %>% # -contains() eliminaes columns with an specific element
+  gather(part_sex, count, -score_range) %>%
+  separate(part_sex, c("part", "sex")) %>%
+  group_by(part,sex) %>%
+  mutate(total = sum(count),
+         prop = count / total) %>% 
+  print
+
+
+
+
 
 

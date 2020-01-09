@@ -616,4 +616,62 @@ df3 = data.frame(id=sample(1:10),z=rnorm(10))
 dfList = list(df1,df2,df3)
 join_all(dfList) # join_all to merge multiple datsets (more than 2)
 
+# Week 3 quiz ----
+# question 1
+if(!file.exists("./qz3")){dir.create("./qz3")}
+getwd()
+setwd("./qz3")
+fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv"
+download.file(fileUrl,destfile = "communities.csv", method = "curl" ) 
+communities <- read.csv("communities.csv")
+str(communities)
+summary(communities$ACR)
+agricultureLogical <- c(communities$ACR == 3 & communities$AGS == 6)
+which(agricultureLogical)
+
+# question 2
+library(jpeg)
+fileUrl1 <- "https://d396qusza40orc.cloudfront.net/getdata%2Fjeff.jpg"
+download.file(fileUrl1,destfile = "jeff.jpeg", method = "curl")
+quantile(readJPEG("jeff.jpeg",native = TRUE),probs = c(0.3,0.8))
+
+# question 3
+library(data.table)
+fileUrl2 <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv"
+download.file(fileUrl2, destfile = "GDP.csv", method = "curl")
+GDP <- fread("./GDP.csv", skip = 5, nrows = 190, select = c(1, 2, 4, 5), 
+             col.names = c("CountryCode", "Rank", "Economy", "Total"))
+str(GDP)
+
+fileUrl3 <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FEDSTATS_Country.csv"
+download.file(fileUrl3,destfile = "edu.csv", method = "curl")
+edu <- fread("./edu.csv")
+str(edu)
+
+matches <- merge(GDP,edu, by="CountryCode")
+str(matches)
+head(arrange(matches[,1:3],desc(Rank)),15)
+
+# question 4
+names(matches)
+matches$`Income Group`
+OECD <- filter(matches, `Income Group`=="High income: OECD")
+nonOECD <- filter(matches, `Income Group`=="High income: nonOECD")
+
+mean(OECD$Rank)
+mean(nonOECD$Rank)
+
+# question 5
+quantile(matches$Rank)
+matches %>% 
+  arrange(desc(Rank)) %>%
+  select(CountryCode:`Income Group`) %>%
+  filter(Rank <= 38 & `Income Group`=="Lower middle income") %>%
+  print
+
+
+
+
+
+
 
