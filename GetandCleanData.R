@@ -669,9 +669,59 @@ matches %>%
   filter(Rank <= 38 & `Income Group`=="Lower middle income") %>%
   print
 
+# Editing text variables ----
+getwd()
+setwd("/Users/alejandrosolis/Desktop/Data_Sc/R/GetandCleanData")
+cameraData <- read.csv("cameras.csv")
+names(cameraData)
+tolower(names(cameraData)) # made all letters lower case
+toupper(names(cameraData)) # made all letters upper case
 
+splitNames <- strsplit(names(cameraData),"\\.") # taking the period from the heading
+splitNames[[5]]
+splitNames[[6]]
 
+mylist <- list(letters = c("A","b","c"),number = 1:3, matrix(1:25,ncol = 5))
+mylist
+mylist[1]
+mylist[[1]]
+mylist[[1]][1]
 
+splitNames[[6]][1]
+
+firstElement <- function(x){x[1]}
+sapply(splitNames,firstElement)
+
+head(reviews,2)
+head(solutions,2)
+sub("_","",names(reviews)) # replacing underscore _ for ""
+
+testName <- "this_is_a_test"
+sub("_","",testName) # only affects the first element
+gsub("_","",testName) # changes all the characters
+
+grep("Alameda",cameraData$intersection) # find all the intersections that contained a string
+table(grepl("Alameda",cameraData$intersection)) # returns logicals for grep
+
+cameraData2 <- cameraData[!grepl("Alameda",cameraData$intersection),] # subsetting using grepl
+
+grep("Alameda",cameraData$intersection, value = TRUE) # return the value that matched
+grep("JeffStreet",cameraData$intersection) # interger (0) no vaues found
+length(grep("JeffStreet",cameraData$intersection))
+
+library(stringr)
+nchar("Alex Solis") # number of characters
+substr("Alex Solis",1,4) # bring just some characters of a string start, stop
+paste("Alex","Solis") # paste into one string, puts spaces in between words
+paste0("Alex","Solis") # paste with no spaces
+str_trim("Alex      ") # eliminates blanks
+
+# best practices for text
+# 1.- All lower case
+# 2.- Descriptive when possible, no acronyms
+# 3.- No duplicates
+# 4.- Avoid dots, underscores, or white spaces
+# 5.- Turn into factors when possible
 
 
 
