@@ -723,5 +723,45 @@ str_trim("Alex      ") # eliminates blanks
 # 4.- Avoid dots, underscores, or white spaces
 # 5.- Turn into factors when possible
 
+# Regular expressions ----
+# literals and metacharacters - they can be used with 
+grep() 
+grepl()
+sub()
+gsub()
+str_extract()
+str_replace()
+
+# ^i think represents the beginning of a line
+# morning$ represents the end of a line
+# Character classes [Bb] [Uu] [Ss] [Hh] matching upper and lower versions of the letter
+# combining metacharacters ^[Ii] am
+# range of characters [a-z] [a-zA-Z] - ^[0-9][a-zA-Z] beginning of a line, all numbers from 0 to 9 and any character upper or lower case
+# [^?.]$ anything that ends except periods and question marks the ^ functions here as NOT
+
+# Regular expressions II ----
+
+# dot means any characters - 9.11 find any line that has a 9follow by any character and then an 11
+# | or - flood|fire it can be any number of alternatives
+# ^[Gg]ood|[Bb]ad
+# ^([Gg]ood|[Bb]ad) by adding parenthesis we apply the metacharacters to all the conditions
+# [Gg]eorge( [ww]\.)? [Bb]ush - the qustion mark allows this to be optional, with backslash we tell it is literallly dot
+# * mean repeated any times + means at least repeated once - (.*) find any characters, repeated any number of times
+# [0-9]+ (.*)[0-9]+ find any numbers repeated at least once follow by any characters follow by numbers
+# {} interval quantifiers, min and mac number of matches - [Bb]ush( +(^ )+ +){1,5} debate space at least once, something it is not an space at least once, follow by at least once space
+# m,n within curly brackets minimum of m but not more the n
+# m exactly m maches
+# m, at least m matches
+# matched text is referred as scaped numbers such as - \1, \2 - +([a-zA-Z]+) +\1 + 
+# - the \1 refers to the previous expression, so to repeat, " night night "
+# ^s(.*)s - the * symbol matches the longet string the matches the condition
+# ^s(.*)s$ - with the dollar sign we limit the search for the longest string
+
+# very goos to use with unfriendly formats and files
+
+
+
+
+
 
 
