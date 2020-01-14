@@ -759,8 +759,64 @@ str_replace()
 
 # very goos to use with unfriendly formats and files
 
+# Working with dates ----
+d1 = date()
+d1
+class(d1) # character
 
+d2 = Sys.Date()
+d2
+class(d2) # Date
 
+format(d2, "%a %b %d")
+# %d - day as number
+# %a - abbreviated weekday
+# %A - Unabbreviated weekday
+# %m - month as number
+# %b - abbreviated month
+# %B - unabbraviated month
+# %y - two digit year
+# %Y - four digit year
+
+x = c("1jan1960","2jan1960","31mar1960","30jul1960")
+z = as.Date(x,"%d%b%Y")
+z
+
+z[1]-z[2] # showing time difference between dates
+as.numeric(z[1]-z[2]) # only the numeric value of the the time difference
+
+weekdays(d2)
+months(d2)
+julian(d2) # julian date returns the number of days since the origin - "1970-01-01
+
+library(lubridate)
+ymd("20200114") # returns a date in the order and format you have written
+mdy("01/14/2020") # returns a date in the order and format you have written
+dmy("14-01-2020") # returns a date in the order and format you have written
+
+ymd_hms("2020-01-14 13:11:03")
+ymd_hms("2020-01-14 13:11:03",tz="Europe/Berlin")
+Sys.timezone() # if having trouble find the local timezone
+
+x = dmy(c("1jan2020","2jan2020","31mar2020","30jul2020"))
+wday(x[1])
+wday(x[1],label = TRUE)
+
+# Data resources ----
+# UN data.un,org/
+# US data.gov/ 
+# UK data.gov.uk/
+# France data.gouv.fr/
+# Ghana data.giv.gh/
+# Australia data.gov.au/
+# Germany govdata.de/
+# HK gov.hk/en/theme/psi/datasets/
+# Japan data.go.jp/
+# others data.gov/opendatasites
+# Gapminder
+# Us surveys asdfree.com/
+# infochimps
+# Kaggle
 
 
 
