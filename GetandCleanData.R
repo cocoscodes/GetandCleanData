@@ -817,6 +817,7 @@ wday(x[1],label = TRUE)
 # Us surveys asdfree.com/
 # infochimps
 # Kaggle
+# APIs - twitter, figshare, PLoS, rOpenSci, Facebook, Googlemaps
 
 
 

@@ -168,8 +168,63 @@ sat %>%
          prop = count / total) %>% 
   print
 
+# Dates and Times with lubridate ----
+swirl()
+# When you are at the R prompt (>):
+# -- Typing skip() allows you to skip the current question.
+# -- Typing play() lets you experiment with R on your own; swirl will ignore what you do...
+# -- UNTIL you type nxt() which will regain swirl's attention.
+# -- Typing bye() causes swirl to exit. Your progress will be saved.
+# -- Typing main() returns you to swirl's main menu.
+# -- Typing info() displays these options again.
 
+Sys.getlocale("LC_TIME")
+library(lubridate)
+help(package = lubridate)
+this_day <- today() # today's date
+this_day
+year(this_day)
+month(this_day)
+day(this_day)
+wday(this_day)
+wday(this_day,label = TRUE)
+this_moment <- now() # today's date with time
+this_moment
+hour(this_moment)
+minute(this_moment)
+second(this_moment)
 
+my_date <- ymd("1989-05-17")
+my_date
+class(my_date)
+ymd("1989 May 17") # ymd understands the format to indentify the element
+mdy("March 12, 1975")
+dmy(25081985)
+ymd("1920/1/2")
+dt1
+ymd_hms(dt1)
+hms("03:22:14")
+dt2
+ymd(dt2)
+update(this_moment, hours = 8, minutes = 34, seconds = 55)
+this_moment <- update(this_moment, hours = now(), minutes = now())
+
+nyc <- now("America/New_York") # list of timezones http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+nyc
+depart <- nyc + days(2)
+depart
+depart <- update(depart,hours = 17, minutes = 34)
+depart
+arrive <- depart + hours(15) + minutes(50)
+?with_tz # returns a date-time as it would appear in a different time zone
+arrive <- with_tz(arrive,"Asia/Hong_Kong")
+arrive
+last_time <- mdy("June 17, 2008", tz="Singapore")
+last_time
+?interval #  creates an Interval object with the specified start and end dates
+how_long <- interval(last_time,arrive)
+as.period(how_long) # to see how long in time
+stopwatch()
 
 
 
