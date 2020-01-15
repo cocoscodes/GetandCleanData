@@ -819,6 +819,40 @@ wday(x[1],label = TRUE)
 # Kaggle
 # APIs - twitter, figshare, PLoS, rOpenSci, Facebook, Googlemaps
 
+# Week 4 quiz ----
+if(!file.exists("./qz4")){dir.create("./qz4")}
+getwd()
+setwd("/Users/alejandrosolis/Desktop/Data_Sc/R/GetandCleanData/qz4")
+fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv"
+download.file(fileUrl,destfile = "idahoData.csv", method = "curl")
+data <- read.csv("idahoData.csv")
+head(data)
+strsplit(names(data),"wgtp")
+
+fileUrl1 <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv"
+download.file(fileUrl1,destfile = "FGDP.csv", method = "curl")
+fgdp <- fread("./FGDP.csv", skip = 5, nrows = 190, select = c(1, 2, 4, 5), 
+                     col.names = c("CountryCode", "Rank", "Economy", "Total"))
+str(fgdp)
+mean(as.numeric(gsub(",","",fgdp$Total)))
+
+countryNames <- grep("^United",fgdp$Economy)
+
+fileUrl2 <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FEDSTATS_Country.csv"
+download.file(fileUrl2,destfile = "edu.csv",method = "curl")
+edu <- read.csv("edu.csv")
+matches <- merge(edu,fgdp,by="CountryCode")
+head(matches)
+fiscalY <- grep("Fiscal year end: June",matches$Special.Notes)
+
+install.packages("quantmod")
+library(quantmod)
+amzn = getSymbols("AMZN",auto.assign=FALSE)
+sampleTimes = index(amzn)
+index <- grep("2012",sampleTimes)
+years <- sampleTimes[yearResult]
+dayNyears <- grep("[Mm]onday",weekdays(years))
+
 
 
 
