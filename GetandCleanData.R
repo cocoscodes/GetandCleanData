@@ -297,7 +297,7 @@ json2[1.1:4]
 
 #httr allows GET, POST, PUT, and DELETE request if you are authorize
 
-# Reading from ohter sources ----
+# Reading from other sources ----
 # usuallythere is an R package for data search of everything
 # use the file, url, gzfile (zip files), and bzfile commands, ?connections
 # remember to close connections
@@ -745,10 +745,10 @@ str_replace()
 # | or - flood|fire it can be any number of alternatives
 # ^[Gg]ood|[Bb]ad
 # ^([Gg]ood|[Bb]ad) by adding parenthesis we apply the metacharacters to all the conditions
-# [Gg]eorge( [ww]\.)? [Bb]ush - the qustion mark allows this to be optional, with backslash we tell it is literallly dot
+# [Gg]eorge( [ww]\.)? [Bb]ush - the question mark allows this to be optional, with backslash we tell it is literallly dot
 # * mean repeated any times + means at least repeated once - (.*) find any characters, repeated any number of times
 # [0-9]+ (.*)[0-9]+ find any numbers repeated at least once follow by any characters follow by numbers
-# {} interval quantifiers, min and mac number of matches - [Bb]ush( +(^ )+ +){1,5} debate space at least once, something it is not an space at least once, follow by at least once space
+# {} interval quantifiers, min and max number of matches - [Bb]ush( +(^ )+ +){1,5} debate space at least once, something it is not an space at least once, follow by at least once space
 # m,n within curly brackets minimum of m but not more the n
 # m exactly m maches
 # m, at least m matches
