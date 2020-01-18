@@ -853,6 +853,3 @@ index <- grep("2012",sampleTimes)
 years <- sampleTimes[yearResult]
 dayNyears <- grep("[Mm]onday",weekdays(years))
 
-
-
-
